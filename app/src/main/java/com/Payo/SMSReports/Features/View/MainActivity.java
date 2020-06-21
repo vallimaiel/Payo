@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.Payo.SMSReports.DataBase.SMS;
+import com.Payo.SMSReports.Features.Modal.SMS;
 import com.Payo.SMSReports.R;
-import com.Payo.SMSReports.ViewModal.SMSViewModel;
+import com.Payo.SMSReports.Features.ViewModal.SMSViewModel;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;

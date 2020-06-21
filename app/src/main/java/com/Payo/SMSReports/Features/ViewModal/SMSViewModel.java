@@ -1,8 +1,8 @@
-package com.Payo.SMSReports.ViewModal;
+package com.Payo.SMSReports.Features.ViewModal;
 
 import android.app.Application;
 
-import com.Payo.SMSReports.DataBase.SMS;
+import com.Payo.SMSReports.Features.Modal.SMS;
 import com.Payo.SMSReports.DataBase.SMSRepository;
 
 import java.util.List;

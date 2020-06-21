@@ -5,15 +5,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.Payo.SMSReports.DataBase.SMS;
+import com.Payo.SMSReports.Features.Modal.SMS;
 import com.Payo.SMSReports.R;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class SMSAdapter extends RecyclerView.Adapter<SMSViewHolder> {
 

@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.Payo.SMSReports.DataBase.SMS;
+import com.Payo.SMSReports.Features.Modal.SMS;
 import com.Payo.SMSReports.R;
 
 import java.util.ArrayList;
@@ -33,7 +33,6 @@ public class SMSListFragment extends Fragment {
         View view = inflater.inflate(R.layout.layout_sms_list, container, false);
         unbinder = ButterKnife.bind(this, view);
         context = getActivity();
-        smsRecycler.setLayoutManager(new LinearLayoutManager(context));
         return view;
     }
 
@@ -44,6 +43,7 @@ public class SMSListFragment extends Fragment {
 
     private void loadRecyclerView(ArrayList<SMS> smsArrayList) {
         if (smsArrayList.size() > 0) {
+            smsRecycler.setLayoutManager(new LinearLayoutManager(context));
             SMSAdapter smsAdapter = new SMSAdapter();
             smsRecycler.setAdapter(smsAdapter);
             smsAdapter.setSMSList(smsArrayList);
