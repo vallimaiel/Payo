@@ -26,6 +26,7 @@ public class SMSListFragment extends Fragment {
     @BindView(R.id.no_data)
     TextView noData;
     private Unbinder unbinder;
+    SMSAdapter smsAdapter;
     Context context;
 
     @Override
@@ -33,6 +34,8 @@ public class SMSListFragment extends Fragment {
         View view = inflater.inflate(R.layout.layout_sms_list, container, false);
         unbinder = ButterKnife.bind(this, view);
         context = getActivity();
+        smsRecycler.setLayoutManager(new LinearLayoutManager(context));
+        smsAdapter = new SMSAdapter(context);
         return view;
     }
 
@@ -42,21 +45,16 @@ public class SMSListFragment extends Fragment {
     }
 
     private void loadRecyclerView(ArrayList<SMS> smsArrayList) {
-        if (smsArrayList.size() > 0) {
-            smsRecycler.setLayoutManager(new LinearLayoutManager(context));
-            SMSAdapter smsAdapter = new SMSAdapter();
-            smsRecycler.setAdapter(smsAdapter);
+        if (smsArrayList.size() > 0 && smsAdapter != null) {
             smsAdapter.setSMSList(smsArrayList);
+            smsRecycler.setAdapter(smsAdapter);
         } else {
-            smsRecycler.setVisibility(View.GONE);
-            noData.setVisibility(View.VISIBLE);
+            if (smsRecycler != null) {
+                smsRecycler.setVisibility(View.GONE);
+                noData.setVisibility(View.VISIBLE);
+            }
         }
     }
 
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 }

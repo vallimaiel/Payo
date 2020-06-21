@@ -23,15 +23,20 @@ public class SMSRepository {
         return smsDAO.getAllSMS();
     }
 
-    public void insertSMS(SMS sms) {
 
-        new InsertCategoryAsyncTask(smsDAO).execute(sms);
+    public void updateSMSTag(int id, String tag) {
+        new UpdateTagAsyncTask(smsDAO, id, tag).execute();
     }
 
-    private static class InsertCategoryAsyncTask extends AsyncTask<SMS, Void, Void> {
+    public void insertSMS(SMS sms) {
+
+        new InsertSMSAsyncTask(smsDAO).execute(sms);
+    }
+
+    private static class InsertSMSAsyncTask extends AsyncTask<SMS, Void, Void> {
         private SmsDAO smsDAO;
 
-        public InsertCategoryAsyncTask(SmsDAO smsDAO) {
+        public InsertSMSAsyncTask(SmsDAO smsDAO) {
             this.smsDAO = smsDAO;
         }
 
@@ -39,6 +44,24 @@ public class SMSRepository {
         protected Void doInBackground(SMS... obj) {
 
             smsDAO.insert(obj[0]);
+            return null;
+        }
+    }
+
+    private static class UpdateTagAsyncTask extends AsyncTask<Void, Void, Void> {
+        private SmsDAO smsDAO;
+        private Integer id;
+        private String tag;
+
+        public UpdateTagAsyncTask(SmsDAO smsDAO, Integer id, String tag) {
+            this.smsDAO = smsDAO;
+            this.id = id;
+            this.tag = tag;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            smsDAO.updateTag(id, tag);
             return null;
         }
     }

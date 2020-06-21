@@ -1,7 +1,9 @@
 package com.Payo.SMSReports.Features.View;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,7 +25,7 @@ import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     @BindView(R.id.title)
@@ -45,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<SMS> smsArrayList;
     private Integer totalExpense;
     private Integer totalIncome;
+    SMSListFragment smsListFragment;
+    ReportsFragment reportsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,13 @@ public class MainActivity extends AppCompatActivity {
     private void initialise() {
         initialiseObject();
         disableDefaultToolbar();
+        TabAdapter tabAdapter = new TabAdapter(getSupportFragmentManager());
+        smsListFragment = new SMSListFragment();
+        reportsFragment = new ReportsFragment();
+        tabAdapter.addFragment(smsListFragment, context.getResources().getString(R.string.sms_list));
+        tabAdapter.addFragment(reportsFragment, context.getResources().getString(R.string.reports));
+        viewPager.setAdapter(tabAdapter);
+        tabId.setupWithViewPager(viewPager);
         smsViewModel.getAllSMS().observe(this, new Observer<List<SMS>>() {
             @Override
             public void onChanged(@Nullable List<SMS> smsList) {
@@ -64,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 fetchIncomeSMSList(smsArrayList);
                 fetchExpenseSMSList(smsArrayList);
                 amount.setText("+" + totalIncome + "  -" + totalExpense);
-                loadTabs();
+                loadTabData();
             }
         });
     }
@@ -90,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
     private void initialiseObject() {
         context = MainActivity.this;
         smsViewModel = ViewModelProviders.of(this).get(SMSViewModel.class);
+        filterIcon.setOnClickListener(this);
     }
 
     private void disableDefaultToolbar() {
@@ -99,15 +111,40 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private void loadTabs() {
-        TabAdapter tabAdapter = new TabAdapter(getSupportFragmentManager());
-        SMSListFragment smsListFragment = new SMSListFragment();
-        ReportsFragment reportsFragment = new ReportsFragment();
-        tabAdapter.addFragment(smsListFragment, context.getResources().getString(R.string.sms_list));
-        tabAdapter.addFragment(reportsFragment, context.getResources().getString(R.string.reports));
-        viewPager.setAdapter(tabAdapter);
-        tabId.setupWithViewPager(viewPager);
+    private void loadTabData() {
         smsListFragment.setRecyclerArrayList(smsArrayList);
         reportsFragment.setReportsData(totalIncome, totalExpense);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.filter_icon:
+                Intent i = new Intent(context, FilterActivity.class);
+                startActivityForResult(i, 1);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+            totalExpense = 0;
+            totalIncome = 0;
+            for (int i = 0; i < smsArrayList.size(); i++) {
+                if (smsArrayList.get(i).getTag().equalsIgnoreCase(data.getStringExtra("tag"))) {
+                    totalExpense = totalExpense + smsArrayList.get(i).getAmount();
+                }
+            }
+            for (int i = 0; i < smsArrayList.size(); i++) {
+                if (smsArrayList.get(i).getTag().equalsIgnoreCase(data.getStringExtra("tag"))) {
+                    totalIncome = totalIncome + smsArrayList.get(i).getAmount();
+                }
+            }
+            reportsFragment.setReportsData(totalIncome, totalExpense);
+        }
     }
 }

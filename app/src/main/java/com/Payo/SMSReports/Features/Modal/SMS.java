@@ -1,13 +1,13 @@
 package com.Payo.SMSReports.Features.Modal;
 
 
-
 import org.json.JSONObject;
 
 import java.util.Date;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "sms_table")

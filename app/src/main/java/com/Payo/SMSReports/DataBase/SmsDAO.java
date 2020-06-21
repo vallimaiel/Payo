@@ -17,9 +17,11 @@ public interface SmsDAO {
     @Insert
     void insert(SMS sms);
 
-    @Update
-    void update(SMS obj);
+    @Query("UPDATE sms_table SET tag = :tag WHERE id = :id")
+    int updateTag(int id, String tag);
 
     @Query("SELECT * FROM sms_table")
     LiveData<List<SMS>> getAllSMS();
+
+
 }

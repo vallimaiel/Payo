@@ -14,6 +14,7 @@ import androidx.lifecycle.LiveData;
 public class SMSViewModel extends AndroidViewModel {
     private SMSRepository smsRepository;
     private LiveData<List<SMS>> allSMS;
+    private LiveData<List<SMS>> allTag;
 
     public SMSViewModel(@NonNull Application application) {
         super(application);
@@ -26,6 +27,11 @@ public class SMSViewModel extends AndroidViewModel {
         allSMS = smsRepository.getSMS();
         return allSMS;
     }
+
+    public void updateTag(Integer id, String tag) {
+        smsRepository.updateSMSTag(id, tag);
+    }
+
 
 
 }
